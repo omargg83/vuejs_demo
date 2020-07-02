@@ -8,9 +8,8 @@
   <body>
     <main id='app'>
       <h1>{{message}}</h1>
+      <input type="text" v-model="message">
     </main>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
