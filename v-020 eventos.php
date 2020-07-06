@@ -49,18 +49,13 @@
           }
         },
         created(){
-          puente.$on('mi-evento',function(){
-            
+          puente.$on('mi-evento',function(parametro){
+            alert(parametro);
           })
         }
       })
 
-      const puente = new Vue({
-        el: '#app',
-        data:{
-          datos:""
-        }
-      })
+      const puente = new Vue()
 
       const app = new Vue({
         el: '#app',
