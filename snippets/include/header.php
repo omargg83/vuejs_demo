@@ -13,5 +13,11 @@
   <body>
     <main id='app'>
       <nav class='blue'>
-
+        <div class="nav-wrapper" v-if="menu == true">
+          <ul id="nav_mobile" class="right hide-on-med-and-down">
+            <li><a href="index.php"><i class='material-icons'>home</i></a></li>
+            <li><a href="alta.php"><i class='material-icons'>add</i></a></li>
+            <li><a href="../login/salir.php">Salir</a></li>
+          </ul>
+        </div>
       </nav>

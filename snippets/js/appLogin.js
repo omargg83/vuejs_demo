@@ -5,7 +5,8 @@ const app=new Vue({
     passC:'',
     respuesta:'',
     correo:'',
-    boton:'btn blue disabled'
+    boton:'btn blue disabled',
+    menu:false
   },
   methods:{
     registro(){
