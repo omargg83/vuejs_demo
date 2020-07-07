@@ -1,30 +1,33 @@
-<?php
-  require_once("conexion.php");
+<?php 
+include 'conexion.php';
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $producto = $_POST['producto'];
+    $precio = htmlentities($_POST['precio']);
+    $cantidad = $con->real_escape_string(htmlentities($_POST['cantidad']));
+    $categoria = $con->real_escape_string(htmlentities($_POST['categoria']));
+    $id = '';
+    //FORMA COMPLETA
+    //$ins = $con->query("INSERT INTO inventario (id,producto,precio,cantidad) VALUES (DEFAULT,'$producto','$precio','$cantidad') ");
 
-  if($_SERVER['REQUEST_METHOD']!='POST'){
+    //FORMA CORTA
+    //$ins = $con->query("INSERT INTO inventario VALUES (DEFAULT,'$producto','$precio','$cantidad','$categoria') ");
+
+    // CONSULTA PREPARADA
+    $ins = $con->prepare("INSERT INTO inventario VALUES (?,?,?,?,?) ");
+    $ins->bind_param("isdis",$id,$producto,$precio,$cantidad,$categoria);
+
+    if($ins->execute()){
+        header("location:index.php");
+    }else{
+        echo "no guardo";
+    }
+
+    $ins->close();
+    $con->close();
+
+}else{
     header("location:index.php");
-    die();
-  }
+}
 
-
-  $producto=clean_var($_REQUEST['producto']);
-  $precio=clean_var($_REQUEST['precio']);
-  $cantidad=clean_var($_REQUEST['cantidad']);
-  $categoria=clean_var($_REQUEST['categoria']);
-
-  $sql="insert inventario (producto, precio, cantidad, categoria) values (:producto, :precio, :cantidad, :categoria)";
-  $sth = $db->dbh->prepare($sql);
-  $sth->bindValue(":producto",$producto);
-  $sth->bindValue(":precio",$precio);
-  $sth->bindValue(":cantidad",$cantidad);
-  $sth->bindValue(":categoria",$categoria);
-  if($sth->execute()){
-    echo "Funciona";
-  }
-  else{
-    echo "no funciona";
-  }
-
-
- ?>
+?>
