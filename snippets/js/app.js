@@ -4,13 +4,17 @@ const app=new Vue({
     menu:true,
     respuesta:'',
     listar:[],
-    buscar:""
+    buscar:"",
+    itemId:"",
+    formEditar:{},
+    userPost:''
   },
   created(){
     axios.get("http://localhost/vuejs_demo/snippets/api/crud/getPost.php")
     .then(res=>{
       this.listar= res.data
     })
+    this.getId();
   },
   computed:{
     datosFiltrados(){
@@ -42,6 +46,88 @@ const app=new Vue({
               confirmButtonText: 'OK!'
             })
           }
+      })
+    },
+    getId(){
+      let uri=window.location.href.split('?');
+      if (uri.length==2) {
+        let vars = uri[1].split('&');
+        let getVars = {};
+        let tmp='';
+        vars.forEach(function(v){
+          tmp = v.split('=');
+          if(tmp.length == 2){
+            getVars[tmp[0]]=tmp[1];
+          }
+        });
+        this.itemId=getVars;
+        console.log(this.itemId.id);
+        axios.get('http://localhost/vuejs_demo/snippets/api/crud/getId.php?id=' + this.itemId.id)
+        .then (res=>{
+          this.formEditar=res.data
+        })
+      }
+    },
+    editar(){
+      const form = document.getElementById('editarPost');
+      axios.post('../api/crud/editarPost.php',new FormData(form))
+      .then( res=> {
+          this.respuesta=res.data
+          if(res.data=="success"){
+            location.href="index.php"
+          }
+          else{
+
+            Swal.fire({
+              title: "Error!",
+              text: 'no se pudo editar',
+              icon: 'error',
+              confirmButtonText: 'OK!'
+            })
+          }
+      })
+    },
+    eliminar(id){
+      Swal.fire({
+        title: 'Estas seguro de eliminar el registro?',
+        text: "No podras deshacer esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.value) {
+          axios.get('http://localhost/vuejs_demo/snippets/api/crud/eliminarId.php?id=' + id)
+          .then (res=>{
+            if(res.data="success"){
+              Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              )
+            }
+            else{
+              Swal.fire(
+                'Deleted!',
+                'No eliminado',
+                'Error'
+              )
+            }
+            //this.getCategoria()
+          })
+
+
+        }
+        else{
+          return false;
+        }
+      })
+    },
+    getUser(){
+      axios.get('http://localhost/vuejs_demo/snippets/api/crud/getUser.php)
+      .then (res=>{
+        this.userPost=res.data
       })
     }
   }

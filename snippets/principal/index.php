@@ -28,8 +28,8 @@
             </p>
           </div>
           <div class="card-action">
-            <a href="">Editar</a>
-            <a href="">Eliminar</a>
+            <a :href="'/vuejs_demo/snippets/principal/editar.php?id='+ item.id">Editar</a>
+            <a href="#" @click="eliminar(item.id)">Eliminar</a>
             <a href="">Copiar</a>
           </div>
         </div>
