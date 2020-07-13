@@ -10,10 +10,8 @@ const app=new Vue({
     userPost:''
   },
   created(){
-    axios.get("http://localhost/vuejs_demo/snippets/api/crud/getPost.php")
-    .then(res=>{
-      this.listar= res.data
-    })
+    this.getCategoria();
+    this.getUser();
     this.getId();
   },
   computed:{
@@ -114,10 +112,8 @@ const app=new Vue({
                 'Error'
               )
             }
-            //this.getCategoria()
+            this.getCategoria();
           })
-
-
         }
         else{
           return false;
@@ -125,10 +121,37 @@ const app=new Vue({
       })
     },
     getUser(){
-      axios.get('http://localhost/vuejs_demo/snippets/api/crud/getUser.php)
-      .then (res=>{
+      axios.get('http://localhost/vuejs_demo/snippets/api/crud/getUser.php')
+      .then (res =>{
+        console.log(res.data);
         this.userPost=res.data
       })
+    },
+    getCategoria(){
+      let uri=window.location.href.split('?');
+      if (uri.length==2) {
+        let vars = uri[1].split('&');
+        let getVars = {};
+        let tmp='';
+        vars.forEach(function(v){
+          tmp = v.split('=');
+          if(tmp.length == 2){
+            getVars[tmp[0]]=tmp[1];
+          }
+        });
+        this.itemId=getVars;
+        console.log(this.itemId.cat);
+        axios.get('http://localhost/vuejs_demo/snippets/api/crud/getCategoria.php?cat=' + this.itemId.cat)
+        .then (res=>{
+          this.listar=res.data
+        })
+      }
+      else{
+        axios.get("http://localhost/vuejs_demo/snippets/api/crud/getPost.php")
+        .then(res=>{
+          this.listar= res.data
+        })
+      }
     }
   }
 })

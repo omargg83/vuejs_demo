@@ -1,5 +1,6 @@
 <?php
   include '../include/header.php';
+  include '../include/sesion.php';
 ?>
 <nav>
    <div class="nav-wrapper indigo lighten-5">
@@ -28,8 +29,8 @@
             </p>
           </div>
           <div class="card-action">
-            <a :href="'/vuejs_demo/snippets/principal/editar.php?id='+ item.id">Editar</a>
-            <a href="#" @click="eliminar(item.id)">Eliminar</a>
+            <a v-if="item.user==userPost" :href="'/vuejs_demo/snippets/principal/editar.php?id='+ item.id">Editar</a>
+            <a v-if="item.user==userPost" href="#" @click="eliminar(item.id)">Eliminar</a>
             <a href="">Copiar</a>
           </div>
         </div>
